@@ -19,42 +19,55 @@ import org.apache.spark.streaming.api.java.*;
 import org.apache.spark.streaming.Durations;
 
 public class KafkaSparkConsumerExample {
-    private static final Logger logger = LogManager.getLogger(KafkaSparkConsumerExample.class);
+    private static final Logger logger = LogManager
+            .getLogger(KafkaSparkConsumerExample.class);
 
     public static void main(final String... args) {
         // Configure Spark to connect to Kafka running on local machine
         Map<String, Object> kafkaParams = new HashMap<>();
-        kafkaParams.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, Commons.EXAMPLE_KAFKA_SERVER);
-        kafkaParams.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        kafkaParams.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        kafkaParams.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                Commons.EXAMPLE_KAFKA_SERVER);
+        kafkaParams.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
+                StringDeserializer.class.getName());
+        kafkaParams.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
+                StringDeserializer.class.getName());
         kafkaParams.put(ConsumerConfig.GROUP_ID_CONFIG, "SparkConsumerGroup");
 
-        //Configure Spark to listen messages in topic test
+        // Configure Spark to listen messages in topic test
         Collection<String> topics = Arrays.asList(Commons.EXAMPLE_KAFKA_TOPIC);
 
-        SparkConf conf = new SparkConf().setMaster("local[2]").setAppName("SparkConsumerApplication");
+        SparkConf conf = new SparkConf().setMaster("local[2]")
+                .setAppName("SparkConsumerApplication");
 
-        //Read messages in batch of 30 seconds
-        JavaStreamingContext jssc = new JavaStreamingContext(conf, Durations.seconds(5));
+        // Read messages in batch of 30 seconds
+        JavaStreamingContext jssc = new JavaStreamingContext(conf,
+                Durations.seconds(5));
 
         // Start reading messages from Kafka and get DStream
-        final JavaInputDStream<ConsumerRecord<String, String>> stream =
-                KafkaUtils.createDirectStream(jssc, LocationStrategies.PreferConsistent(),
+        final JavaInputDStream<ConsumerRecord<String, String>> stream = KafkaUtils
+                .createDirectStream(jssc, LocationStrategies.PreferConsistent(),
                         ConsumerStrategies.Subscribe(topics, kafkaParams));
 
         // Read value of each message from Kafka and return it
-        JavaDStream<String> lines = stream.map((Function<ConsumerRecord<String, String>, String>) kafkaRecord -> kafkaRecord.value());
+        JavaDStream<String> lines = stream.map(
+                (Function<ConsumerRecord<String, String>, String>) kafkaRecord -> kafkaRecord
+                        .value());
 
         // Break every message into words and return list of words
-        JavaDStream<String> words = lines.flatMap((FlatMapFunction<String, String>) line -> Arrays.asList(line.split(" ")).iterator());
+        JavaDStream<String> words = lines
+                .flatMap((FlatMapFunction<String, String>) line -> Arrays
+                        .asList(line.split(" ")).iterator());
 
         // Take every word and return Tuple with (word,1)
-        JavaPairDStream<String, Integer> wordMap = words.mapToPair((PairFunction<String, String, Integer>) word -> new Tuple2<>(word, 1));
+        JavaPairDStream<String, Integer> wordMap = words.mapToPair(
+                (PairFunction<String, String, Integer>) word -> new Tuple2<>(word, 1));
 
         // Count occurrence of each word
-        JavaPairDStream<String, Integer> wordCount = wordMap.reduceByKey((Function2<Integer, Integer, Integer>) (first, second) -> first + second);
+        JavaPairDStream<String, Integer> wordCount = wordMap
+                .reduceByKey((Function2<Integer, Integer, Integer>) (first,
+                        second) -> first + second);
 
-        //Print the word count
+        // Print the word count
         wordCount.print();
 
         jssc.start();
@@ -65,6 +78,5 @@ public class KafkaSparkConsumerExample {
         }
 
     }
-
 
 }
