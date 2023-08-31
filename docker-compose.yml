@@ -10,6 +10,8 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 32181
       ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 32181:32181
     networks:
       bridge:
         aliases:
