@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import org.davidcampos.kafka.commons.Commons;
 
 import java.util.Properties;
+import java.util.Random;
 import java.util.UUID;
 
 public class KafkaProducerExample {
@@ -25,17 +26,21 @@ public class KafkaProducerExample {
         props.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
                 StringSerializer.class.getName());
 
+        String[] words = new String[] { "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten" };
+        Random ran = new Random(System.currentTimeMillis());
         KafkaProducer<String, String> producer = new KafkaProducer<>(props);
 
         try {
             while (true) {
+                String word = words[ran.nextInt(words.length)];
                 String uuid = UUID.randomUUID().toString();
 
-                ProducerRecord<String, String> record = new ProducerRecord<>("example",
-                        uuid, "nilai_7");
+                ProducerRecord<String, String> record = new ProducerRecord<>(Commons.EXAMPLE_KAFKA_TOPIC,
+                        uuid, word);
                 producer.send(record);
+                logger.info("Sent ({}, {}) to topic {}.", uuid, word, Commons.EXAMPLE_KAFKA_TOPIC);
 
-                Thread.sleep(500);
+                Thread.sleep(100);
             }
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
