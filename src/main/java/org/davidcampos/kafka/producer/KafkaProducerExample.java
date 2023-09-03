@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import org.davidcampos.kafka.commons.Commons;
 
 import java.util.Properties;
+import java.util.UUID;
 
 public class KafkaProducerExample {
     private static final Logger logger = LogManager
@@ -28,8 +29,10 @@ public class KafkaProducerExample {
 
         try {
             while (true) {
+                String uuid = UUID.randomUUID().toString();
+
                 ProducerRecord<String, String> record = new ProducerRecord<>("example",
-                        "kunci_6", "nilai_7");
+                        uuid, "nilai_7");
                 producer.send(record);
 
                 Thread.sleep(500);
