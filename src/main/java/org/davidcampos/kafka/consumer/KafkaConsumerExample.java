@@ -37,11 +37,11 @@ public class KafkaConsumerExample {
         // Subscribe to the topic.
         consumer.subscribe(Arrays.asList(Commons.EXAMPLE_KAFKA_TOPIC));
 
-        logger.info("Remove final in consumerRecords");
+        logger.info("Set Duration to ofMillis(100)");
 
         while (true) {
             ConsumerRecords<String, String> consumerRecords = consumer.poll(
-                    Duration.ofMinutes(1));
+                    Duration.ofMillis(100));
             consumerRecords.forEach(record -> {
                 String word = record.value();
 
