@@ -8,7 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.davidcampos.kafka.commons.Commons;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.time.Duration;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
@@ -34,9 +34,9 @@ public class KafkaConsumerExample {
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
 
         // Subscribe to the topic.
-        consumer.subscribe(Collections.singletonList(Commons.EXAMPLE_KAFKA_TOPIC));
+        consumer.subscribe(Arrays.asList(Commons.EXAMPLE_KAFKA_TOPIC));
 
-        logger.info("Set Consumer to KafkaConsumer");
+        logger.info("Set consumer.subscribe() to Arrays.asList()");
 
         while (true) {
             final ConsumerRecords<String, String> consumerRecords = consumer.poll(Duration.ofMinutes(1));
