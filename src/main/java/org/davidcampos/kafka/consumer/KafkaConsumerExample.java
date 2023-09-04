@@ -23,7 +23,7 @@ public class KafkaConsumerExample {
         ConcurrentMap<String, Integer> counters = new ConcurrentHashMap<>();
         final Consumer<String, String> consumer = createConsumer();
 
-        logger.info("Add consumer poll Duration");
+        logger.info("Add KafkaConsumer generic type");
 
         while (true) {
             final ConsumerRecords<String, String> consumerRecords = consumer.poll(Duration.ofMinutes(1));
@@ -51,7 +51,7 @@ public class KafkaConsumerExample {
                 StringDeserializer.class.getName());
 
         // Create the consumer using properties
-        final Consumer<String, String> consumer = new KafkaConsumer(props);
+        final Consumer<String, String> consumer = new KafkaConsumer<>(props);
 
         // Subscribe to the topic.
         consumer.subscribe(Collections.singletonList(Commons.EXAMPLE_KAFKA_TOPIC));
