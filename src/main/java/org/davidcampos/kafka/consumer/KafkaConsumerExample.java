@@ -1,6 +1,5 @@
 package org.davidcampos.kafka.consumer;
 
-import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -32,12 +31,12 @@ public class KafkaConsumerExample {
                 StringDeserializer.class.getName());
 
         // Create the consumer using properties
-        final Consumer<String, String> consumer = new KafkaConsumer<>(props);
+        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
 
         // Subscribe to the topic.
         consumer.subscribe(Collections.singletonList(Commons.EXAMPLE_KAFKA_TOPIC));
 
-        logger.info("Remove consumer_1");
+        logger.info("Set Consumer to KafkaConsumer");
 
         while (true) {
             final ConsumerRecords<String, String> consumerRecords = consumer.poll(Duration.ofMinutes(1));
