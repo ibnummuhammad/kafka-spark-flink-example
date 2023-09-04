@@ -37,20 +37,24 @@ public class KafkaConsumerExample {
         // Subscribe to the topic.
         consumer.subscribe(Arrays.asList(Commons.EXAMPLE_KAFKA_TOPIC));
 
-        logger.info("Set Duration to ofMillis(100)");
+        logger.info("Add try finally");
 
-        while (true) {
-            ConsumerRecords<String, String> consumerRecords = consumer.poll(
-                    Duration.ofMillis(100));
-            consumerRecords.forEach(record -> {
-                String word = record.value();
+        try {
+            while (true) {
+                ConsumerRecords<String, String> consumerRecords = consumer.poll(
+                        Duration.ofMillis(100));
+                consumerRecords.forEach(record -> {
+                    String word = record.value();
 
-                int count = counters.containsKey(word) ? counters.get(word) : 0;
-                counters.put(word, ++count);
+                    int count = counters.containsKey(word) ? counters.get(word) : 0;
+                    counters.put(word, ++count);
 
-                logger.info("({}, {})", word, count);
-            });
-            consumer.commitAsync();
+                    logger.info("({}, {})", word, count);
+                });
+                consumer.commitAsync();
+            }
+        } finally {
+            consumer.close();
         }
     }
 }
