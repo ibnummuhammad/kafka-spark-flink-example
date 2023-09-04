@@ -80,15 +80,3 @@ services:
       EXAMPLE_ZOOKEEPER_SERVER: "zookeeper:32181"
     networks:
       - bridge
-
-  kafka-consumer-flink:
-    image: kafka-spark-flink-example
-    depends_on:
-      - kafka-producer
-    environment:
-      EXAMPLE_GOAL: "consumer.flink"
-      EXAMPLE_KAFKA_TOPIC: "example"
-      EXAMPLE_KAFKA_SERVER: "kafka:9092"
-      EXAMPLE_ZOOKEEPER_SERVER: "zookeeper:32181"
-    networks:
-      - bridge
