@@ -24,11 +24,11 @@ public class KafkaConsumerExample {
 
         // Create properties
         final Properties props = new Properties();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, Commons.EXAMPLE_KAFKA_SERVER);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "KafkaConsumerGroup");
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
+        props.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, Commons.EXAMPLE_KAFKA_SERVER);
+        props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "KafkaConsumerGroup");
+        props.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
                 StringDeserializer.class.getName());
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
+        props.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
                 StringDeserializer.class.getName());
         // Create the consumer_1 using properties
         final Consumer<String, String> consumer_1 = new KafkaConsumer<>(props);
@@ -37,7 +37,7 @@ public class KafkaConsumerExample {
 
         final Consumer<String, String> consumer = consumer_1;
 
-        logger.info("Remove createConsumer()");
+        logger.info("Add Properties setProperty()");
 
         while (true) {
             final ConsumerRecords<String, String> consumerRecords = consumer.poll(Duration.ofMinutes(1));
