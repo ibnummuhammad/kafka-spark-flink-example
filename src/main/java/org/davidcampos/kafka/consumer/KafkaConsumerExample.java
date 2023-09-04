@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.davidcampos.kafka.commons.Commons;
 
 import java.util.Collections;
+import java.time.Duration;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -22,10 +23,10 @@ public class KafkaConsumerExample {
         ConcurrentMap<String, Integer> counters = new ConcurrentHashMap<>();
         final Consumer<String, String> consumer = createConsumer();
 
-        logger.info("Remove unused modules");
+        logger.info("Add consumer poll Duration");
 
         while (true) {
-            final ConsumerRecords<String, String> consumerRecords = consumer.poll(1000);
+            final ConsumerRecords<String, String> consumerRecords = consumer.poll(Duration.ofMinutes(1));
             consumerRecords.forEach(record -> {
                 String word = record.value();
 
