@@ -38,7 +38,7 @@ public class KafkaConsumerExample {
         // Subscribe to the topic.
         consumer.subscribe(Arrays.asList(Commons.EXAMPLE_KAFKA_TOPIC));
 
-        logger.info("Remove consumer.commitAsync()");
+        logger.info("Revamp consumer output");
 
         try {
             while (true) {
@@ -46,12 +46,9 @@ public class KafkaConsumerExample {
                         Duration.ofMillis(100));
 
                 for (ConsumerRecord<String, String> record : consumerRecords) {
-                    String word = record.value();
-
-                    int count = counters.containsKey(word) ? counters.get(word) : 0;
-                    counters.put(word, ++count);
-
-                    logger.info("({}, {})", word, count);
+                    logger.info("Key: " + record.key() + ", Value: " + record.value()
+                            + ", Partition: " + record.partition() + ", Offset:"
+                            + record.offset());
                 }
             }
         } finally {
