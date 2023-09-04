@@ -29,7 +29,7 @@ public class KafkaSparkConsumerExample {
             .getLogger(KafkaSparkConsumerExample.class);
 
     public static void main(final String... args) {
-        String cetak = "Set org.apache.spark spark-streaming_2.11 to 2.4.8";
+        String cetak = "Set org.apache.spark spark-streaming-kafka-0-10_2.11 version to 2.4.8";
         logger.info(cetak);
         System.out.println(cetak);
 
