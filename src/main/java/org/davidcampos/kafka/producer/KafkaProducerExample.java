@@ -30,6 +30,8 @@ public class KafkaProducerExample {
         Random ran = new Random(System.currentTimeMillis());
         KafkaProducer<String, String> producer = new KafkaProducer<>(props);
 
+        logger.info("Add producer close");
+
         try {
             while (true) {
                 String word = words[ran.nextInt(words.length)];
@@ -45,7 +47,9 @@ public class KafkaProducerExample {
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        } finally {
+            producer.flush();
+            producer.close();
         }
-
     }
 }
