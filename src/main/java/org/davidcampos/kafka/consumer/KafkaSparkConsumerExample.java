@@ -1,6 +1,9 @@
 package org.davidcampos.kafka.consumer;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -23,7 +26,9 @@ public class KafkaSparkConsumerExample {
             .getLogger(KafkaSparkConsumerExample.class);
 
     public static void main(final String... args) {
-        logger.info("Set org.slf4j slf4j-log4j12 to 1.7.36");
+        String cetak = "Revamp module java.util";
+        logger.info(cetak);
+        System.out.println(cetak);
 
         // Configure Spark to connect to Kafka running on local machine
         Map<String, Object> kafkaParams = new HashMap<>();
