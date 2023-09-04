@@ -12,16 +12,12 @@ import org.davidcampos.kafka.commons.Commons;
 import java.util.Arrays;
 import java.time.Duration;
 import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 public class KafkaConsumerExample {
     private static final Logger logger = LogManager
             .getLogger(KafkaConsumerExample.class);
 
     public static void main(final String... args) {
-        ConcurrentMap<String, Integer> counters = new ConcurrentHashMap<>();
-
         // Create properties
         final Properties props = new Properties();
         props.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
@@ -38,7 +34,7 @@ public class KafkaConsumerExample {
         // Subscribe to the topic.
         consumer.subscribe(Arrays.asList(Commons.EXAMPLE_KAFKA_TOPIC));
 
-        logger.info("Revamp consumer output");
+        logger.info("Remove unused modules");
 
         try {
             while (true) {
