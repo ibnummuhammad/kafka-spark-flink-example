@@ -38,7 +38,7 @@ public class KafkaConsumerExample {
         // Subscribe to the topic.
         consumer.subscribe(Arrays.asList(Commons.EXAMPLE_KAFKA_TOPIC));
 
-        logger.info("Change for loop");
+        logger.info("Remove consumer.commitAsync()");
 
         try {
             while (true) {
@@ -53,7 +53,6 @@ public class KafkaConsumerExample {
 
                     logger.info("({}, {})", word, count);
                 }
-                consumer.commitAsync();
             }
         } finally {
             consumer.close();
