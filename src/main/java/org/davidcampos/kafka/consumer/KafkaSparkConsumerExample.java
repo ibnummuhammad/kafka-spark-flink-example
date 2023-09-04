@@ -17,7 +17,10 @@ import org.davidcampos.kafka.commons.Commons;
 import scala.Tuple2;
 
 import org.apache.spark.SparkConf;
-import org.apache.spark.api.java.function.*;
+import org.apache.spark.api.java.function.FlatMapFunction;
+import org.apache.spark.api.java.function.Function;
+import org.apache.spark.api.java.function.Function2;
+import org.apache.spark.api.java.function.PairFunction;
 import org.apache.spark.streaming.api.java.*;
 import org.apache.spark.streaming.Durations;
 
@@ -26,7 +29,7 @@ public class KafkaSparkConsumerExample {
             .getLogger(KafkaSparkConsumerExample.class);
 
     public static void main(final String... args) {
-        String cetak = "Revamp module java.util";
+        String cetak = "Revamp module org.apache.spark.api.java.function";
         logger.info(cetak);
         System.out.println(cetak);
 
