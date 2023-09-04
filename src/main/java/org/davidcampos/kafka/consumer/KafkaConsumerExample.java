@@ -21,9 +21,23 @@ public class KafkaConsumerExample {
 
     public static void main(final String... args) {
         ConcurrentMap<String, Integer> counters = new ConcurrentHashMap<>();
-        final Consumer<String, String> consumer = createConsumer();
 
-        logger.info("Add KafkaConsumer generic type");
+        // Create properties
+        final Properties props = new Properties();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, Commons.EXAMPLE_KAFKA_SERVER);
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "KafkaConsumerGroup");
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
+                StringDeserializer.class.getName());
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
+                StringDeserializer.class.getName());
+        // Create the consumer_1 using properties
+        final Consumer<String, String> consumer_1 = new KafkaConsumer<>(props);
+        // Subscribe to the topic.
+        consumer_1.subscribe(Collections.singletonList(Commons.EXAMPLE_KAFKA_TOPIC));
+
+        final Consumer<String, String> consumer = consumer_1;
+
+        logger.info("Remove createConsumer()");
 
         while (true) {
             final ConsumerRecords<String, String> consumerRecords = consumer.poll(Duration.ofMinutes(1));
@@ -37,24 +51,5 @@ public class KafkaConsumerExample {
             });
             consumer.commitAsync();
         }
-    }
-
-    private static Consumer<String, String> createConsumer() {
-        // Create properties
-        final Properties props = new Properties();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                Commons.EXAMPLE_KAFKA_SERVER);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "KafkaConsumerGroup");
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
-                StringDeserializer.class.getName());
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
-                StringDeserializer.class.getName());
-
-        // Create the consumer using properties
-        final Consumer<String, String> consumer = new KafkaConsumer<>(props);
-
-        // Subscribe to the topic.
-        consumer.subscribe(Collections.singletonList(Commons.EXAMPLE_KAFKA_TOPIC));
-        return consumer;
     }
 }
