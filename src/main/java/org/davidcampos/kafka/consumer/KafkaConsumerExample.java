@@ -1,6 +1,7 @@
 package org.davidcampos.kafka.consumer;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -37,20 +38,21 @@ public class KafkaConsumerExample {
         // Subscribe to the topic.
         consumer.subscribe(Arrays.asList(Commons.EXAMPLE_KAFKA_TOPIC));
 
-        logger.info("Add try finally");
+        logger.info("Change for loop");
 
         try {
             while (true) {
                 ConsumerRecords<String, String> consumerRecords = consumer.poll(
                         Duration.ofMillis(100));
-                consumerRecords.forEach(record -> {
+
+                for (ConsumerRecord<String, String> record : consumerRecords) {
                     String word = record.value();
 
                     int count = counters.containsKey(word) ? counters.get(word) : 0;
                     counters.put(word, ++count);
 
                     logger.info("({}, {})", word, count);
-                });
+                }
                 consumer.commitAsync();
             }
         } finally {
