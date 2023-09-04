@@ -30,14 +30,14 @@ public class KafkaConsumerExample {
                 StringDeserializer.class.getName());
         props.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
                 StringDeserializer.class.getName());
-        // Create the consumer_1 using properties
-        final Consumer<String, String> consumer_1 = new KafkaConsumer<>(props);
+
+        // Create the consumer using properties
+        final Consumer<String, String> consumer = new KafkaConsumer<>(props);
+
         // Subscribe to the topic.
-        consumer_1.subscribe(Collections.singletonList(Commons.EXAMPLE_KAFKA_TOPIC));
+        consumer.subscribe(Collections.singletonList(Commons.EXAMPLE_KAFKA_TOPIC));
 
-        final Consumer<String, String> consumer = consumer_1;
-
-        logger.info("Add Properties setProperty()");
+        logger.info("Remove consumer_1");
 
         while (true) {
             final ConsumerRecords<String, String> consumerRecords = consumer.poll(Duration.ofMinutes(1));
