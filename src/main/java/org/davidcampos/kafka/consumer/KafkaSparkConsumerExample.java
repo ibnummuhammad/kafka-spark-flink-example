@@ -29,7 +29,7 @@ public class KafkaSparkConsumerExample {
             .getLogger(KafkaSparkConsumerExample.class);
 
     public static void main(final String... args) {
-        String cetak = "Revamp module org.apache.spark.api.java.function";
+        String cetak = "Remove dependency com.fasterxml.jackson.module jackson-module-scala_2.11 2.9.5";
         logger.info(cetak);
         System.out.println(cetak);
 
