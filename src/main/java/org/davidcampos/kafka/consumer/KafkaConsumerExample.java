@@ -23,7 +23,8 @@ public class KafkaConsumerExample {
 
         // Create properties
         final Properties props = new Properties();
-        props.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, Commons.EXAMPLE_KAFKA_SERVER);
+        props.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                Commons.EXAMPLE_KAFKA_SERVER);
         props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "KafkaConsumerGroup");
         props.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
                 StringDeserializer.class.getName());
@@ -36,10 +37,11 @@ public class KafkaConsumerExample {
         // Subscribe to the topic.
         consumer.subscribe(Arrays.asList(Commons.EXAMPLE_KAFKA_TOPIC));
 
-        logger.info("Set consumer.subscribe() to Arrays.asList()");
+        logger.info("Remove final in consumerRecords");
 
         while (true) {
-            final ConsumerRecords<String, String> consumerRecords = consumer.poll(Duration.ofMinutes(1));
+            ConsumerRecords<String, String> consumerRecords = consumer.poll(
+                    Duration.ofMinutes(1));
             consumerRecords.forEach(record -> {
                 String word = record.value();
 
