@@ -71,20 +71,23 @@ public class KafkaSparkConsumerExample {
                 .flatMap((FlatMapFunction<String, String>) line -> Arrays
                         .asList(line.split(" ")).iterator());
 
+        // Print the word count
+        words.print();
+
         // Take every word and return Tuple with (word,1)
         JavaPairDStream<String, Integer> wordMap = words.mapToPair(
                 (PairFunction<String, String, Integer>) word -> new Tuple2<>(word, 1));
 
-        // Print the word count
-        wordMap.print();
+        // // Print the word count
+        // wordMap.print();
 
         // Count occurrence of each word
         JavaPairDStream<String, Integer> wordCount = wordMap
                 .reduceByKey((Function2<Integer, Integer, Integer>) (first,
                         second) -> first + second);
 
-        // Print the word count
-        wordCount.print();
+        // // Print the word count
+        // wordCount.print();
 
         jssc.start();
         try {
