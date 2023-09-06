@@ -20,7 +20,7 @@ public class KafkaFlinkConsumerExample {
 
     public static void main(final String... args) {
 
-        System.out.println("Add flinkSource");
+        System.out.println("Add setProperty()");
 
         // Create execution environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment
@@ -28,9 +28,9 @@ public class KafkaFlinkConsumerExample {
 
         // Properties
         final Properties props = new Properties();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
+        props.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
                 Commons.EXAMPLE_KAFKA_SERVER);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "FlinkConsumerGroup");
+        props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "FlinkConsumerGroup");
 
         FlinkKafkaConsumer010<String> flinkSource = new FlinkKafkaConsumer010<>(
                 Commons.EXAMPLE_KAFKA_TOPIC, new SimpleStringSchema(), props);
