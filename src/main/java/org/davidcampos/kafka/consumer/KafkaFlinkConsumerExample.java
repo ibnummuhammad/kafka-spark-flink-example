@@ -20,7 +20,7 @@ public class KafkaFlinkConsumerExample {
 
     public static void main(final String... args) {
 
-        System.out.println("Revert messageStream.print()");
+        System.out.println("Set org.apache.flink flink-connector-kafka-0.10_2.11 version to 1.10.1");
 
         // Create execution environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment
