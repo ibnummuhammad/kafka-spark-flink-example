@@ -20,7 +20,7 @@ public class KafkaFlinkConsumerExample {
 
     public static void main(final String... args) {
 
-        System.out.println("Add setProperty()");
+        System.out.println("Add messageStream.print()");
 
         // Create execution environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment
@@ -37,10 +37,12 @@ public class KafkaFlinkConsumerExample {
 
         DataStream<String> messageStream = env.addSource(flinkSource);
 
-        // Split up the lines in pairs (2-tuples) containing: (word,1)
-        messageStream.flatMap(new Tokenizer())
-                // group by the tuple field "0" and sum up tuple field "1"
-                .keyBy(0).sum(1).print();
+        messageStream.print();
+
+        // // Split up the lines in pairs (2-tuples) containing: (word,1)
+        // messageStream.flatMap(new Tokenizer())
+        // // group by the tuple field "0" and sum up tuple field "1"
+        // .keyBy(0).sum(1).print();
 
         try {
             env.execute("flink-read");
