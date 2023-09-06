@@ -20,8 +20,7 @@ public class KafkaFlinkConsumerExample {
 
     public static void main(final String... args) {
 
-        System.out.println("Println Remove dependencies flink-java and flink-clients_2.11");
-        logger.info("Remove dependencies flink-java and flink-clients_2.11");
+        System.out.println("Set org.apache.flink flink-streaming-java_2.11 version to 1.7.0");
 
         // Create execution environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment
