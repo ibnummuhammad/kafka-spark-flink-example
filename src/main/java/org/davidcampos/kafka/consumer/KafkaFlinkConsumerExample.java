@@ -20,7 +20,7 @@ public class KafkaFlinkConsumerExample {
 
     public static void main(final String... args) {
 
-        System.out.println("Add env.execute(flink-read)");
+        System.out.println("Add flinkSource");
 
         // Create execution environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment
@@ -32,8 +32,10 @@ public class KafkaFlinkConsumerExample {
                 Commons.EXAMPLE_KAFKA_SERVER);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "FlinkConsumerGroup");
 
-        DataStream<String> messageStream = env.addSource(new FlinkKafkaConsumer010<>(
-                Commons.EXAMPLE_KAFKA_TOPIC, new SimpleStringSchema(), props));
+        FlinkKafkaConsumer010<String> flinkSource = new FlinkKafkaConsumer010<>(
+                Commons.EXAMPLE_KAFKA_TOPIC, new SimpleStringSchema(), props);
+
+        DataStream<String> messageStream = env.addSource(flinkSource);
 
         // Split up the lines in pairs (2-tuples) containing: (word,1)
         messageStream.flatMap(new Tokenizer())
