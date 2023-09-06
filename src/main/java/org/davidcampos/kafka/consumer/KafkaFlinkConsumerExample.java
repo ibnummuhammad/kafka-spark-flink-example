@@ -19,6 +19,10 @@ public class KafkaFlinkConsumerExample {
             .getLogger(KafkaFlinkConsumerExample.class);
 
     public static void main(final String... args) {
+
+        System.out.println("Println Remove dependencies flink-java and flink-clients_2.11");
+        logger.info("Remove dependencies flink-java and flink-clients_2.11");
+
         // Create execution environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment
                 .getExecutionEnvironment();
