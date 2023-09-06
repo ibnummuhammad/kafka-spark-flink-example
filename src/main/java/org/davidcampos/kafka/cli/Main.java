@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.davidcampos.kafka.commons.Commons;
 import org.davidcampos.kafka.consumer.KafkaConsumerExample;
+import org.davidcampos.kafka.consumer.KafkaFlinkConsumerExample;
 import org.davidcampos.kafka.consumer.KafkaSparkConsumerExample;
 import org.davidcampos.kafka.producer.KafkaProducerExample;
 
@@ -29,6 +30,9 @@ public class Main {
                 break;
             case "consumer.spark":
                 KafkaSparkConsumerExample.main();
+                break;
+            case "consumer.flink":
+                KafkaFlinkConsumerExample.main();
                 break;
             default:
                 logger.error("No valid goal to run.");
