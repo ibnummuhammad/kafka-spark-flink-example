@@ -20,7 +20,7 @@ public class KafkaFlinkConsumerExample {
 
     public static void main(final String... args) {
 
-        System.out.println("Set org.apache.flink flink-streaming-java_2.11 version to 1.10.1");
+        System.out.println("Add env.execute(flink-read)");
 
         // Create execution environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment
@@ -41,7 +41,7 @@ public class KafkaFlinkConsumerExample {
                 .keyBy(0).sum(1).print();
 
         try {
-            env.execute();
+            env.execute("flink-read");
         } catch (Exception e) {
             logger.error("An error occurred.", e);
         }
