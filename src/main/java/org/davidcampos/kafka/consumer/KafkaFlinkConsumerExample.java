@@ -23,7 +23,7 @@ public class KafkaFlinkConsumerExample {
 
     public static void main(final String... args) {
 
-        System.out.println("Add result");
+        System.out.println("Add result printSchema()");
 
         // Create execution environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment
@@ -38,6 +38,8 @@ public class KafkaFlinkConsumerExample {
 
         System.out.println("ini result");
         System.out.println(result);
+
+        result.printSchema();
 
         // // Properties
         // final Properties props = new Properties();
@@ -55,11 +57,11 @@ public class KafkaFlinkConsumerExample {
         // // group by the tuple field "0" and sum up tuple field "1"
         // .keyBy(0).sum(1).print();
 
-        // try {
-        // env.execute("flink-read");
-        // } catch (Exception e) {
-        // logger.error("An error occurred.", e);
-        // }
+        try {
+            env.execute("flink-sql");
+        } catch (Exception e) {
+            logger.error("An error occurred.", e);
+        }
     }
 
     public static final class Tokenizer
