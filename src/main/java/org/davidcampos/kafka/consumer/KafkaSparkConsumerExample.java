@@ -32,7 +32,7 @@ public class KafkaSparkConsumerExample {
             .getLogger(KafkaSparkConsumerExample.class);
 
     public static void main(final String... args) {
-        String cetak = "Revamp modules org.apache.spark.streaming.api.java";
+        String cetak = "Add lines.print()";
         logger.info(cetak);
         System.out.println(cetak);
 
@@ -66,28 +66,30 @@ public class KafkaSparkConsumerExample {
                 (Function<ConsumerRecord<String, String>, String>) kafkaRecord -> kafkaRecord
                         .value());
 
-        // Break every message into words and return list of words
-        JavaDStream<String> words = lines
-                .flatMap((FlatMapFunction<String, String>) line -> Arrays
-                        .asList(line.split(" ")).iterator());
+        lines.print();
 
-        // Print the word count
-        words.print();
-
-        // Take every word and return Tuple with (word,1)
-        JavaPairDStream<String, Integer> wordMap = words.mapToPair(
-                (PairFunction<String, String, Integer>) word -> new Tuple2<>(word, 1));
+        // // Break every message into words and return list of words
+        // JavaDStream<String> words = lines
+        // .flatMap((FlatMapFunction<String, String>) line -> Arrays
+        // .asList(line.split(" ")).iterator());
 
         // // Print the word count
-        // wordMap.print();
+        // words.print();
 
-        // Count occurrence of each word
-        JavaPairDStream<String, Integer> wordCount = wordMap
-                .reduceByKey((Function2<Integer, Integer, Integer>) (first,
-                        second) -> first + second);
+        // // Take every word and return Tuple with (word,1)
+        // JavaPairDStream<String, Integer> wordMap = words.mapToPair(
+        // (PairFunction<String, String, Integer>) word -> new Tuple2<>(word, 1));
 
-        // // Print the word count
-        // wordCount.print();
+        // // // Print the word count
+        // // wordMap.print();
+
+        // // Count occurrence of each word
+        // JavaPairDStream<String, Integer> wordCount = wordMap
+        // .reduceByKey((Function2<Integer, Integer, Integer>) (first,
+        // second) -> first + second);
+
+        // // // Print the word count
+        // // wordCount.print();
 
         jssc.start();
         try {
