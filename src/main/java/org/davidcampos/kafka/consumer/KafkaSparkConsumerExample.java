@@ -26,13 +26,14 @@ import org.apache.spark.streaming.api.java.JavaInputDStream;
 import org.apache.spark.streaming.api.java.JavaPairDStream;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
 import org.apache.spark.streaming.Durations;
+import org.apache.spark.sql.SparkSession;
 
 public class KafkaSparkConsumerExample {
     private static final Logger logger = LogManager
             .getLogger(KafkaSparkConsumerExample.class);
 
     public static void main(final String... args) {
-        String cetak = "Add words.print()";
+        String cetak = "Add words.foreachRDD()";
         logger.info(cetak);
         System.out.println(cetak);
 
@@ -91,13 +92,30 @@ public class KafkaSparkConsumerExample {
         // // // Print the word count
         // // wordCount.print();
 
+        words.foreachRDD((rdd, time) -> {
+            SparkSession spark = JavaSparkSessionSingleton
+                    .getInstance(rdd.context().getConf());
+
+            System.out.println("ini spark");
+            System.out.println(spark);
+        });
+
         jssc.start();
         try {
             jssc.awaitTermination();
         } catch (InterruptedException e) {
             logger.error("An error occurred.", e);
         }
-
     }
+}
 
+class JavaSparkSessionSingleton {
+    private static transient SparkSession instance = null;
+
+    public static SparkSession getInstance(SparkConf sparkConf) {
+        if (instance == null) {
+            instance = SparkSession.builder().config(sparkConf).getOrCreate();
+        }
+        return instance;
+    }
 }
