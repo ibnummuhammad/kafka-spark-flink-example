@@ -6,6 +6,7 @@ import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer010;
+import org.apache.flink.table.api.java.StreamTableEnvironment;
 import org.apache.flink.util.Collector;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.log4j.LogManager;
@@ -20,14 +21,17 @@ public class KafkaFlinkConsumerExample {
 
     public static void main(final String... args) {
 
-        System.out.println("print env");
+        System.out.println(
+                "Revert Add artifactId flink-table-planner_2.11 and flink-streaming-scala_2.11");
 
         // Create execution environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment
                 .getExecutionEnvironment();
+        StreamTableEnvironment tableEnv = StreamTableEnvironment
+                .getTableEnvironment(env);
 
-        System.out.println("ini env");
-        System.out.println(env);
+        System.out.println("ini tableEnv");
+        System.out.println(tableEnv);
 
         // // Properties
         // final Properties props = new Properties();
