@@ -32,7 +32,7 @@ public class KafkaSparkConsumerExample {
             .getLogger(KafkaSparkConsumerExample.class);
 
     public static void main(final String... args) {
-        String cetak = "Add lines.print()";
+        String cetak = "Add words.print()";
         logger.info(cetak);
         System.out.println(cetak);
 
@@ -66,15 +66,15 @@ public class KafkaSparkConsumerExample {
                 (Function<ConsumerRecord<String, String>, String>) kafkaRecord -> kafkaRecord
                         .value());
 
-        lines.print();
+        // lines.print();
 
-        // // Break every message into words and return list of words
-        // JavaDStream<String> words = lines
-        // .flatMap((FlatMapFunction<String, String>) line -> Arrays
-        // .asList(line.split(" ")).iterator());
+        // Break every message into words and return list of words
+        JavaDStream<String> words = lines
+                .flatMap((FlatMapFunction<String, String>) line -> Arrays
+                        .asList(line.split(" ")).iterator());
 
-        // // Print the word count
-        // words.print();
+        // Print the word count
+        words.print();
 
         // // Take every word and return Tuple with (word,1)
         // JavaPairDStream<String, Integer> wordMap = words.mapToPair(
