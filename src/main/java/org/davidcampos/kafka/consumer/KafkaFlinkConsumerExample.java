@@ -20,33 +20,36 @@ public class KafkaFlinkConsumerExample {
 
     public static void main(final String... args) {
 
-        System.out.println("Set org.apache.flink flink-connector-kafka-0.10_2.11 version to 1.10.1 v2");
+        System.out.println("print env");
 
         // Create execution environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment
                 .getExecutionEnvironment();
 
-        // Properties
-        final Properties props = new Properties();
-        props.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                Commons.EXAMPLE_KAFKA_SERVER);
-        props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "FlinkConsumerGroup");
+        System.out.println("ini env");
+        System.out.println(env);
 
-        FlinkKafkaConsumer010<String> flinkSource = new FlinkKafkaConsumer010<>(
-                Commons.EXAMPLE_KAFKA_TOPIC, new SimpleStringSchema(), props);
+        // // Properties
+        // final Properties props = new Properties();
+        // props.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
+        // Commons.EXAMPLE_KAFKA_SERVER);
+        // props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "FlinkConsumerGroup");
 
-        DataStream<String> messageStream = env.addSource(flinkSource);
+        // FlinkKafkaConsumer010<String> flinkSource = new FlinkKafkaConsumer010<>(
+        // Commons.EXAMPLE_KAFKA_TOPIC, new SimpleStringSchema(), props);
 
-        // Split up the lines in pairs (2-tuples) containing: (word,1)
-        messageStream.flatMap(new Tokenizer())
-                // group by the tuple field "0" and sum up tuple field "1"
-                .keyBy(0).sum(1).print();
+        // DataStream<String> messageStream = env.addSource(flinkSource);
 
-        try {
-            env.execute("flink-read");
-        } catch (Exception e) {
-            logger.error("An error occurred.", e);
-        }
+        // // Split up the lines in pairs (2-tuples) containing: (word,1)
+        // messageStream.flatMap(new Tokenizer())
+        // // group by the tuple field "0" and sum up tuple field "1"
+        // .keyBy(0).sum(1).print();
+
+        // try {
+        // env.execute("flink-read");
+        // } catch (Exception e) {
+        // logger.error("An error occurred.", e);
+        // }
     }
 
     public static final class Tokenizer
