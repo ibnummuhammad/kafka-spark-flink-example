@@ -17,6 +17,7 @@ import org.davidcampos.kafka.commons.Commons;
 import scala.Tuple2;
 
 import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.Function2;
@@ -33,7 +34,7 @@ public class KafkaSparkConsumerExample {
             .getLogger(KafkaSparkConsumerExample.class);
 
     public static void main(final String... args) {
-        String cetak = "Add words.foreachRDD()";
+        String cetak = "Add rowRDD";
         logger.info(cetak);
         System.out.println(cetak);
 
@@ -96,8 +97,14 @@ public class KafkaSparkConsumerExample {
             SparkSession spark = JavaSparkSessionSingleton
                     .getInstance(rdd.context().getConf());
 
-            System.out.println("ini spark");
-            System.out.println(spark);
+            JavaRDD<JavaRow> rowRDD = rdd.map(word -> {
+                JavaRow record = new JavaRow();
+                record.setWord(word);
+                return record;
+            });
+
+            System.out.println("ini rowRDD");
+            System.out.println(rowRDD);
         });
 
         jssc.start();
@@ -117,5 +124,17 @@ class JavaSparkSessionSingleton {
             instance = SparkSession.builder().config(sparkConf).getOrCreate();
         }
         return instance;
+    }
+}
+
+class JavaRow implements java.io.Serializable {
+    private String word;
+
+    public String getWord() {
+        return word;
+    }
+
+    public void setWord(String word) {
+        this.word = word;
     }
 }
