@@ -36,7 +36,7 @@ public class KafkaSparkConsumerExample {
             .getLogger(KafkaSparkConsumerExample.class);
 
     public static void main(final String... args) {
-        String cetak = "Add wordsDataFrame";
+        String cetak = "Add wordsDataFrame.createOrReplaceTempView()";
         logger.info(cetak);
         System.out.println(cetak);
 
@@ -105,6 +105,8 @@ public class KafkaSparkConsumerExample {
                 return record;
             });
             Dataset<Row> wordsDataFrame = spark.createDataFrame(rowRDD, JavaRow.class);
+
+            wordsDataFrame.createOrReplaceTempView("words");
 
             System.out.println("ini wordsDataFrame");
             System.out.println(wordsDataFrame);
