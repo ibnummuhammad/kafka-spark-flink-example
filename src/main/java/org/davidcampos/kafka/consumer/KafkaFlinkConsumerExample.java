@@ -23,7 +23,7 @@ public class KafkaFlinkConsumerExample {
 
     public static void main(final String... args) {
 
-        System.out.println("Add inputTable");
+        System.out.println("Add result");
 
         // Create execution environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment
@@ -34,9 +34,10 @@ public class KafkaFlinkConsumerExample {
                 Row.of("Bob", 10), Row.of("Alice", 100), Row.of("Lucy", 50));
 
         Table inputTable = tableEnv.fromDataStream(dataStream);
+        Table result = tableEnv.sqlQuery("SELECT * FROM " + inputTable);
 
-        System.out.println("ini inputTable");
-        System.out.println(inputTable);
+        System.out.println("ini result");
+        System.out.println(result);
 
         // // Properties
         // final Properties props = new Properties();
