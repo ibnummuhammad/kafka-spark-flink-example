@@ -36,7 +36,7 @@ public class KafkaSparkConsumerExample {
             .getLogger(KafkaSparkConsumerExample.class);
 
     public static void main(final String... args) {
-        String cetak = "Add wordCountsDataFrame.show()";
+        String cetak = "Add 'select word, count(*) as total from words group by word'";
         logger.info(cetak);
         System.out.println(cetak);
 
@@ -113,7 +113,7 @@ public class KafkaSparkConsumerExample {
 
             // Do word count on table using SQL and print it
             Dataset<Row> wordCountsDataFrame = spark
-                    .sql("select * from words");
+                    .sql("select word, count(*) as total from words group by word");
             System.out.println("========= " + time + "=========");
             wordCountsDataFrame.show();
 
