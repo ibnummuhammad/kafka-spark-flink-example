@@ -21,17 +21,12 @@ public class KafkaFlinkConsumerExample {
 
     public static void main(final String... args) {
 
-        System.out.println(
-                "Revert Add artifactId flink-table-planner_2.11 and flink-streaming-scala_2.11");
+        System.out.println("Add StreamTableEnvironment create()");
 
         // Create execution environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment
                 .getExecutionEnvironment();
-        StreamTableEnvironment tableEnv = StreamTableEnvironment
-                .getTableEnvironment(env);
-
-        System.out.println("ini tableEnv");
-        System.out.println(tableEnv);
+        StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
 
         // // Properties
         // final Properties props = new Properties();
