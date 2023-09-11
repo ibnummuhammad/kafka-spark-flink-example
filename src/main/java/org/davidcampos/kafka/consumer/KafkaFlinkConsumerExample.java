@@ -2,6 +2,7 @@ package org.davidcampos.kafka.consumer;
 
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
+import org.apache.flink.api.java.tuple.Tuple1;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.typeutils.TupleTypeInfo;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -25,7 +26,7 @@ public class KafkaFlinkConsumerExample {
 
     public static void main(final String... args) {
 
-        System.out.println("Add messageStream");
+        System.out.println("Add resulStream print()");
 
         // Create execution environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment
@@ -62,17 +63,16 @@ public class KafkaFlinkConsumerExample {
         // // group by the tuple field "0" and sum up tuple field "1"
         // .keyBy(0).sum(1).print();
 
-        TupleTypeInfo<Tuple2<String, String>> tupleTypeHop = new TupleTypeInfo<>(
-                Types.STRING(), Types.STRING());
+        TupleTypeInfo<Tuple1<String>> tupleTypeHop = new TupleTypeInfo<>(
+                Types.STRING());
 
         Table inputTable = tableEnv.fromDataStream(messageStream);
         Table result = tableEnv.sqlQuery("SELECT * FROM " + inputTable);
         result.printSchema();
 
-        // DataStream<Tuple2<String, String>> resulStream =
-        // tableEnv.toAppendStream(result,
-        // tupleTypeHop);
-        // resulStream.print();
+        DataStream<Tuple1<String>> resulStream = tableEnv.toAppendStream(result,
+                tupleTypeHop);
+        resulStream.print();
 
         try {
             env.execute("flink-sql");
