@@ -6,6 +6,7 @@ import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer010;
+import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.java.StreamTableEnvironment;
 import org.apache.flink.types.Row;
 import org.apache.flink.util.Collector;
@@ -22,7 +23,7 @@ public class KafkaFlinkConsumerExample {
 
     public static void main(final String... args) {
 
-        System.out.println("Add dataStream");
+        System.out.println("Add inputTable");
 
         // Create execution environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment
@@ -32,8 +33,10 @@ public class KafkaFlinkConsumerExample {
         DataStream<Row> dataStream = env.fromElements(Row.of("Alice", 12),
                 Row.of("Bob", 10), Row.of("Alice", 100), Row.of("Lucy", 50));
 
-        System.out.println("ini dataStream");
-        System.out.println(dataStream);
+        Table inputTable = tableEnv.fromDataStream(dataStream);
+
+        System.out.println("ini inputTable");
+        System.out.println(inputTable);
 
         // // Properties
         // final Properties props = new Properties();
