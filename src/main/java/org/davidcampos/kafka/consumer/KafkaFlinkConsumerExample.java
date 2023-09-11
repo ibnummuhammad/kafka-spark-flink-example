@@ -25,42 +25,54 @@ public class KafkaFlinkConsumerExample {
 
     public static void main(final String... args) {
 
-        System.out.println("Add resulStream print()");
-
-        TupleTypeInfo<Tuple2<String, Integer>> tupleTypeHop = new TupleTypeInfo<>(
-                Types.STRING(), Types.INT());
+        System.out.println("Add messageStream");
 
         // Create execution environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment
                 .getExecutionEnvironment();
         StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
 
-        DataStream<Row> dataStream = env.fromElements(Row.of("Alice", 12),
-                Row.of("Bob", 10), Row.of("Alice", 100), Row.of("Lucy", 50));
+        // TupleTypeInfo<Tuple2<String, Integer>> tupleTypeHop = new TupleTypeInfo<>(
+        // Types.STRING(), Types.INT());
 
-        Table inputTable = tableEnv.fromDataStream(dataStream);
-        Table result = tableEnv.sqlQuery("SELECT * FROM " + inputTable);
-        result.printSchema();
+        // DataStream<Row> dataStream = env.fromElements(Row.of("Alice", 12),
+        // Row.of("Bob", 10), Row.of("Alice", 100), Row.of("Lucy", 50));
 
-        DataStream<Tuple2<String, Integer>> resulStream = tableEnv
-                .toAppendStream(result, tupleTypeHop);
-        resulStream.print();
+        // Table inputTable = tableEnv.fromDataStream(dataStream);
+        // Table result = tableEnv.sqlQuery("SELECT * FROM " + inputTable);
+        // result.printSchema();
 
-        // // Properties
-        // final Properties props = new Properties();
-        // props.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
-        // Commons.EXAMPLE_KAFKA_SERVER);
-        // props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "FlinkConsumerGroup");
+        // DataStream<Tuple2<String, Integer>> resulStream = tableEnv
+        // .toAppendStream(result, tupleTypeHop);
+        // resulStream.print();
 
-        // FlinkKafkaConsumer010<String> flinkSource = new FlinkKafkaConsumer010<>(
-        // Commons.EXAMPLE_KAFKA_TOPIC, new SimpleStringSchema(), props);
+        // Properties
+        final Properties props = new Properties();
+        props.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                Commons.EXAMPLE_KAFKA_SERVER);
+        props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "FlinkConsumerGroup");
 
-        // DataStream<String> messageStream = env.addSource(flinkSource);
+        FlinkKafkaConsumer010<String> flinkSource = new FlinkKafkaConsumer010<>(
+                Commons.EXAMPLE_KAFKA_TOPIC, new SimpleStringSchema(), props);
+
+        DataStream<String> messageStream = env.addSource(flinkSource);
 
         // // Split up the lines in pairs (2-tuples) containing: (word,1)
         // messageStream.flatMap(new Tokenizer())
         // // group by the tuple field "0" and sum up tuple field "1"
         // .keyBy(0).sum(1).print();
+
+        TupleTypeInfo<Tuple2<String, String>> tupleTypeHop = new TupleTypeInfo<>(
+                Types.STRING(), Types.STRING());
+
+        Table inputTable = tableEnv.fromDataStream(messageStream);
+        Table result = tableEnv.sqlQuery("SELECT * FROM " + inputTable);
+        result.printSchema();
+
+        // DataStream<Tuple2<String, String>> resulStream =
+        // tableEnv.toAppendStream(result,
+        // tupleTypeHop);
+        // resulStream.print();
 
         try {
             env.execute("flink-sql");
