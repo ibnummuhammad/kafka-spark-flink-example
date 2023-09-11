@@ -3,10 +3,12 @@ package org.davidcampos.kafka.consumer;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.api.java.typeutils.TupleTypeInfo;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer010;
 import org.apache.flink.table.api.Table;
+import org.apache.flink.table.api.Types;
 import org.apache.flink.table.api.java.StreamTableEnvironment;
 import org.apache.flink.types.Row;
 import org.apache.flink.util.Collector;
@@ -23,7 +25,10 @@ public class KafkaFlinkConsumerExample {
 
     public static void main(final String... args) {
 
-        System.out.println("Add result printSchema()");
+        System.out.println("Add resulStream print()");
+
+        TupleTypeInfo<Tuple2<String, Integer>> tupleTypeHop = new TupleTypeInfo<>(
+                Types.STRING(), Types.INT());
 
         // Create execution environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment
@@ -35,11 +40,11 @@ public class KafkaFlinkConsumerExample {
 
         Table inputTable = tableEnv.fromDataStream(dataStream);
         Table result = tableEnv.sqlQuery("SELECT * FROM " + inputTable);
-
-        System.out.println("ini result");
-        System.out.println(result);
-
         result.printSchema();
+
+        DataStream<Tuple2<String, Integer>> resulStream = tableEnv
+                .toAppendStream(result, tupleTypeHop);
+        resulStream.print();
 
         // // Properties
         // final Properties props = new Properties();
