@@ -36,7 +36,7 @@ public class KafkaSparkConsumerExample {
             .getLogger(KafkaSparkConsumerExample.class);
 
     public static void main(final String... args) {
-        String cetak = "Add wordsDataFrame.createOrReplaceTempView()";
+        String cetak = "Add wordCountsDataFrame.show()";
         logger.info(cetak);
         System.out.println(cetak);
 
@@ -99,14 +99,23 @@ public class KafkaSparkConsumerExample {
             SparkSession spark = JavaSparkSessionSingleton
                     .getInstance(rdd.context().getConf());
 
-            JavaRDD<JavaRow> rowRDD = rdd.map(word -> {
-                JavaRow record = new JavaRow();
+            // Convert JavaRDD[String] to JavaRDD[bean class] to DataFrame
+            JavaRDD<JavaRecord> rowRDD = rdd.map(word -> {
+                JavaRecord record = new JavaRecord();
                 record.setWord(word);
                 return record;
             });
-            Dataset<Row> wordsDataFrame = spark.createDataFrame(rowRDD, JavaRow.class);
+            Dataset<Row> wordsDataFrame = spark.createDataFrame(rowRDD,
+                    JavaRecord.class);
 
+            // Creates a temporary view using the DataFrame
             wordsDataFrame.createOrReplaceTempView("words");
+
+            // Do word count on table using SQL and print it
+            Dataset<Row> wordCountsDataFrame = spark
+                    .sql("select * from words");
+            System.out.println("========= " + time + "=========");
+            wordCountsDataFrame.show();
 
             System.out.println("ini wordsDataFrame");
             System.out.println(wordsDataFrame);
@@ -129,17 +138,5 @@ class JavaSparkSessionSingleton {
             instance = SparkSession.builder().config(sparkConf).getOrCreate();
         }
         return instance;
-    }
-}
-
-class JavaRow implements java.io.Serializable {
-    private String word;
-
-    public String getWord() {
-        return word;
-    }
-
-    public void setWord(String word) {
-        this.word = word;
     }
 }
