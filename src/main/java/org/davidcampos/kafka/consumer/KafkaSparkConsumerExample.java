@@ -27,6 +27,8 @@ import org.apache.spark.streaming.api.java.JavaInputDStream;
 import org.apache.spark.streaming.api.java.JavaPairDStream;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
 import org.apache.spark.streaming.Durations;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 
 public class KafkaSparkConsumerExample {
@@ -34,7 +36,7 @@ public class KafkaSparkConsumerExample {
             .getLogger(KafkaSparkConsumerExample.class);
 
     public static void main(final String... args) {
-        String cetak = "Add rowRDD";
+        String cetak = "Add wordsDataFrame";
         logger.info(cetak);
         System.out.println(cetak);
 
@@ -102,9 +104,10 @@ public class KafkaSparkConsumerExample {
                 record.setWord(word);
                 return record;
             });
+            Dataset<Row> wordsDataFrame = spark.createDataFrame(rowRDD, JavaRow.class);
 
-            System.out.println("ini rowRDD");
-            System.out.println(rowRDD);
+            System.out.println("ini wordsDataFrame");
+            System.out.println(wordsDataFrame);
         });
 
         jssc.start();
