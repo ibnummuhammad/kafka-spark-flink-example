@@ -31,6 +31,8 @@ public class KafkaFlinkConsumerExample {
         // Create execution environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment
                 .getExecutionEnvironment();
+        System.out.println("env...");
+        System.out.println(env);
         StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
 
         // TupleTypeInfo<Tuple2<String, Integer>> tupleTypeHop = new TupleTypeInfo<>(
@@ -57,6 +59,9 @@ public class KafkaFlinkConsumerExample {
                 Commons.EXAMPLE_KAFKA_TOPIC, new SimpleStringSchema(), props);
 
         DataStream<String> messageStream = env.addSource(flinkSource);
+        System.out.println("messageStream.print()");
+        System.out.println(messageStream);
+        messageStream.print();
 
         // // Split up the lines in pairs (2-tuples) containing: (word,1)
         // messageStream.flatMap(new Tokenizer())
@@ -67,12 +72,21 @@ public class KafkaFlinkConsumerExample {
                 Types.STRING());
 
         Table inputTable = tableEnv.fromDataStream(messageStream);
+        System.out.println("inputTable.printSchema()");
+        System.out.println(inputTable);
+        inputTable.printSchema();
         Table result = tableEnv.sqlQuery("SELECT * FROM " + inputTable);
+        System.out.println("result.printSchema()");
+        System.out.println(result);
         result.printSchema();
 
         DataStream<Tuple1<String>> resulStream = tableEnv.toAppendStream(result,
                 tupleTypeHop);
-        resulStream.print();
+        System.out.println("resulStream.print()");
+        System.out.println(resulStream);
+        // resulStream.print();
+
+        System.out.println("akhir");
 
         try {
             env.execute("flink-sql");
